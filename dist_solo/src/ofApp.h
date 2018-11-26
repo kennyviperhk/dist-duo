@@ -2,9 +2,12 @@
 
 #include "ofMain.h"
 #include "ofxSerial.h"
-//#define USEPI
+//#define USE_PI
+#define USE_GPIO
 
-#ifdef USEPI
+
+
+#ifdef USE_PI
 #include "ofxOMXPlayer.h"
 #else
 
@@ -69,7 +72,7 @@ public:
     
     
     
-#ifdef USEPI
+#ifdef USE_PI
     ofxOMXPlayer vid1;
     ofxOMXPlayer vid2;
 #else

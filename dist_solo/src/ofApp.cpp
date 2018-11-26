@@ -14,7 +14,7 @@ void ofApp::setup(){
     
     
     
-#ifdef USEPI
+#ifdef USE_PI
     string  videoPath = ofToDataPath("face.mp4",true);
     ofxOMXPlayerSettings settings;
     settings.videoPath = videoPath;
@@ -154,7 +154,7 @@ void ofApp::update(){
     receivedVal = serialRead();
     currAngle = receivedVal[1];
     //================== Video ==================
-#ifdef USEPI
+#ifdef USE_PI
     
 #else
     vid1.update();
