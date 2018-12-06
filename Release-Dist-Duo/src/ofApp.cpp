@@ -12,10 +12,6 @@ void ofApp::setup(){
    
     
     sendChar();
-    
-    
-
-    
     ofHideCursor();
     
     //=====DEBUG =====
@@ -84,13 +80,13 @@ void ofApp::update(){
         
     }
     
-    if(ofGetFrameNum() > 100 ){
+    if(ofGetFrameNum() > 100 && AUTO_RESTART){
         if(ofGetFrameRate() <15){
             ofLog()<< "Too Slow, restart!";
             std::exit(1);
         }
-                    ofLog()<< "prevAngle" <<prevAngle;
-              ofLog()<< "currAngle" <<currAngle;
+	ofLog()<< "prevAngle" <<prevAngle;
+	ofLog()<< "currAngle" <<currAngle;
         if(receivedVal[1]==0 || angleChangeSpeed == 0){
             
             serialFailCheck++;
@@ -197,7 +193,7 @@ void ofApp::videoMixing(){
         }
         
         ofPopMatrix();
-        ofLog() << "Scale : "<<var;
+        //ofLog() << "Scale : "<<var;
         
         
     }
@@ -262,6 +258,53 @@ void ofApp::draw(){
         
     }
     
+        ofBackground(0);
+
+    ofSetColor(255);
+
+    std::stringstream ss;
+
+    ss << "         FPS: " << ofGetFrameRate() << std::endl;
+    for(int i=0 ;i < arduino.size(); i++){
+	    ss << "Connected to: " << arduino[i].port();
+	}
+
+
+    ofDrawBitmapString(ss.str(), ofVec2f(20, 20));
+
+    int x = 20;
+    int y = 50;
+    int height = 20;
+
+    auto iter = serialMessages.begin();
+
+    // Cycle through each of our messages and delete those that have expired.
+    while (iter != serialMessages.end())
+    {
+        iter->fade -= 1;
+
+        if (iter->fade < 0)
+        {
+            iter = serialMessages.erase(iter);
+        }
+        else
+        {
+            ofSetColor(255, ofClamp(iter->fade, 0, 255));
+            ofDrawBitmapString(iter->message, ofVec2f(x, y));
+
+            y += height;
+
+            if (!iter->exception.empty())
+            {
+                ofSetColor(255, 0, 0, ofClamp(iter->fade, 0, 255));
+                ofDrawBitmapString(iter->exception, ofVec2f(x + height, y));
+                y += height;
+            }
+
+            ++iter;
+        }
+    }
+    
 }
 
 //--------------------------------------------------------------
@@ -320,6 +363,12 @@ void ofApp::mouseMoved(int x, int y ){
 }
 
 
+
+ //===========================================
+ //================== Setup ==================
+ //===========================================
+
+
 vector<float> ofApp::serialRead(){
     
     vector<float> currVal;
@@ -363,7 +412,7 @@ vector<float> ofApp::serialRead(){
             //  }
             
             
-            
+            ofLog() << " msg : " << receivedMsg;
             if (!iter->exception.empty())
             {
                 // y += height;
@@ -375,6 +424,7 @@ vector<float> ofApp::serialRead(){
     
     
     for(int i =0 ; i< receivedMsg.size(); i++){
+	ofLog() << "receivedMsg : "<< receivedMsg;
         if(receivedMsg.find("ypr") != std::string::npos){
             receivedMsg = receivedMsg.erase(0,3);
             //  ofLog() << "1. receivedMsg.erase(0,3) " << receivedMsg;
@@ -404,31 +454,17 @@ vector<float> ofApp::serialRead(){
 
 
 
-void ofApp::onSerialBuffer(const ofx::IO::SerialBufferEventArgs& args)
-{
-    // Buffers will show up here when the marker character is found.
-    SerialMessage message(args.getBuffer().toString(), "", 500);
-    serialMessages.push_back(message);
-}
-
-void ofApp::onSerialError(const ofx::IO::SerialBufferErrorEventArgs& args)
-{
-    // Errors and their corresponding buffer (if any) will show up here.
-    SerialMessage message(args.getBuffer().toString(),
-                          args.getException().displayText(),
-                          500);
-    serialMessages.push_back(message);
-}
-
 
 void ofApp::sendChar(){
+
     vector<uint8_t> hi;
     hi.push_back(0);
     ofx::IO::ByteBuffer buffer(hi);
     if(arduino.size() > 0) {
 	    arduino[0].writeByte(hi[0]);
-	}
-
+	        ofLog() << "send char ";
+    }
+    ofLog() << "send char done";
 }
 
 void ofApp::sendDir(char a){
@@ -469,9 +505,87 @@ void ofApp::sendMoveTo(int b){
     
 }
 
+
+
+void ofApp::onSerialBuffer(const ofx::IO::SerialBufferEventArgs& args)
+{
+    // Buffers will show up here when the marker character is found.
+    SerialMessage message(args.getBuffer().toString(), "", 500);
+    serialMessages.push_back(message);
+    ofLog() << "Has Msg: "<<message.message;
+}
+
+void ofApp::onSerialError(const ofx::IO::SerialBufferErrorEventArgs& args)
+{
+    // Errors and their corresponding buffer (if any) will show up here.
+    SerialMessage message(args.getBuffer().toString(),
+                          args.getException().displayText(),
+                          500);
+    serialMessages.push_back(message);
+}
+
+
  //===========================================
  //================== Setup ==================
  //===========================================
+
+
+void ofApp::serialSetup(){
+    
+      
+    //================== Serial ==================
+    
+    std::vector<ofx::IO::SerialDeviceInfo> devicesInfo = ofx::IO::SerialDeviceUtils::listDevices();
+    
+    ofLogNotice("ofApp::setup") << "Connected Devices: ";
+
+    for (std::size_t i = 0; i < devicesInfo.size(); ++i)
+    {
+        ofLogNotice("ofApp::setup") << "\t" << devicesInfo[i];
+    }
+    int a = 0;
+    if (!devicesInfo.empty())
+    {
+        
+        for (std::size_t i = 0; i < devicesInfo.size(); ++i)
+        {
+            string portDesc = devicesInfo[i].getDescription();
+            ofLog() << "devicesInfo[i].getDescription() : " << devicesInfo[i].getDescription();
+            
+         //   if(portDesc.find("FT232R") != std::string::npos )
+                            if(portDesc.find("FTDI") != std::string::npos )
+            {
+                // Connect to the first matching device.
+                ofx::IO::BufferedSerialDevice device;
+		arduino.push_back(device);
+                bool success = arduino[a].setup(devicesInfo[i], 115200);
+                
+                if(success)
+                {
+		    arduino[a].unregisterAllEvents(this);
+                    arduino[a].registerAllEvents(this);
+		    
+		    a++;
+                    
+                    ofLogNotice("ofApp::setup") << "Arduino Successfully setup " << devicesInfo[i];
+                    
+                }
+                else
+                {
+                    ofLogNotice("ofApp::setup") << "Unable to setup " << devicesInfo[i];
+                }
+           }
+        }
+    }
+    else
+    {
+        ofLogNotice("ofApp::setup") << "No devices connected.";
+    }
+
+    ofLog() << "Serial Setup Done" ;
+}
+
+
 
 
 
@@ -480,8 +594,7 @@ void ofApp::videoPlayerSetup(){
  //================== Video ==================
 
     vidDisplayScale = VIDEO_DISPLAY_SCALE;
-    
-    videoPlayerSetup();
+
     
 #ifdef USE_PI
     string  videoPath = ofToDataPath("face.mp4",true);
@@ -520,64 +633,17 @@ void ofApp::videoPlayerSetup(){
     
     finalVid.allocate(ofGetWidth(), ofGetHeight());
 
-
+    ofLog() << "Video Player Setup Done";
 }
 
 
 
-void ofApp::serialSetup(){
-    
-      
-    //================== Serial ==================
-    
-    std::vector<ofx::IO::SerialDeviceInfo> devicesInfo = ofx::IO::SerialDeviceUtils::listDevices();
-    
-    ofLogNotice("ofApp::setup") << "Connected Devices: ";
-    
-    for (std::size_t i = 0; i < devicesInfo.size(); ++i)
-    {
-        ofLogNotice("ofApp::setup") << "\t" << devicesInfo[i];
-    }
-    
-    if (!devicesInfo.empty())
-    {
-        
-        for (std::size_t i = 0; i < devicesInfo.size(); ++i)
-        {
-            string portDesc = devicesInfo[i].getDescription();
-            ofLog() << "devicesInfo[i].getDescription() : " << devicesInfo[i].getDescription();
-            
-         //   if(portDesc.find("FT232R") != std::string::npos )
-                            if(portDesc.find("FTDI") != std::string::npos )
-            {
-                // Connect to the first matching device.
-                ofx::IO::BufferedSerialDevice device;
-                bool success = device.setup(devicesInfo[i], 115200);
-                
-                if(success)
-                {
-		    device.unregisterAllEvents(this);
-                    device.registerAllEvents(this);
-		    arduino.push_back(device);
 
-                    
-                    ofLogNotice("ofApp::setup") << "Arduino Successfully setup " << devicesInfo[i];
-                    
-                }
-                else
-                {
-                    ofLogNotice("ofApp::setup") << "Unable to setup " << devicesInfo[i];
-                }
-           }
-        }
+void ofApp::exit()
+{
+    for(int i=0; i < arduino.size() ; i++){
+	arduino[i].unregisterAllEvents(this);
     }
-    else
-    {
-        ofLogNotice("ofApp::setup") << "No devices connected.";
-    }
+    
 
-    ofLog() << "Serial Setup Done" ;
 }
-
-
-

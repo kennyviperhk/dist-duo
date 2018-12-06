@@ -1,4 +1,3 @@
-ofxGPIO
 ofxIO
 ofxPoco
 ofxSerial
