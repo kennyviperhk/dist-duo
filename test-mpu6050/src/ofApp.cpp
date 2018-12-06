@@ -40,6 +40,7 @@ void ofApp::update(){
 
 void ofApp::draw(){
 	ofBackgroundGradient(ofColor::black,ofColor::cyan);
+	/*
 	ofEnableDepthTest();
 	cam.begin();
 		ofRotateX(compAngleX);
@@ -53,6 +54,40 @@ void ofApp::draw(){
 		ofDrawBox(500);
 	cam.end();
 	ofDisableDepthTest();
+	*/
+	ofPushMatrix();
+		ofTranslate(ofGetWidth()/2, ofGetHeight()/2);
+		ofRotateDeg(compAngleX);
+		ofPushMatrix();
+			ofTranslate(-25, -25);
+			ofSetColor(0,0,255);
+			ofDrawRectangle(0,0,50,50);
+		ofPopMatrix();
+	ofPopMatrix();
+	
+		ofPushMatrix();
+		ofTranslate(ofGetWidth()/2 + 200, ofGetHeight()/2);
+		ofRotateDeg(compAngleY);
+		ofPushMatrix();
+			ofTranslate(-25, -25);
+			ofSetColor(0,255,0);
+			ofDrawRectangle(0,0,50,50);
+		ofPopMatrix();
+	ofPopMatrix();
+	
+		ofPushMatrix();
+		ofTranslate(ofGetWidth()/2 + 400, ofGetHeight()/2);
+		ofRotateDeg(compAngleZ);
+		ofPushMatrix();
+			ofTranslate(-25, -25);
+			ofSetColor(255,0,0);
+			ofDrawRectangle(0,0,50,50);
+		ofPopMatrix();
+	ofPopMatrix();
+	
 	ofDrawBitmapStringHighlight("Temp:"+temperature+" C - FPS:"+ofToString(ofGetFrameRate()),20,20);
+	ofDrawBitmapStringHighlight("X:" + ofToString(compAngleX) ,20,40);
+	ofDrawBitmapStringHighlight("Y:" + ofToString(compAngleY) ,20,60);
+	ofDrawBitmapStringHighlight("Z:" + ofToString(compAngleZ) ,20,80);
 }
 
