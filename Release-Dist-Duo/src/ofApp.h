@@ -2,8 +2,7 @@
 
 #include "ofMain.h"
 #include "ofxSerial.h"
-//#define USE_PI
-#define USE_GPIO
+#define USE_PI
 
 
 
@@ -16,6 +15,8 @@
 
 #define FRAMERATE 25
 #define VIDEO_DISPLAY_SCALE 0.2
+
+#define AUTO_RESTART 0
 
 
 class SerialMessage
@@ -46,6 +47,7 @@ public:
     void setup();
     void update();
     void draw();
+    void exit();
     
     
     void keyPressed(int key);
@@ -127,20 +129,9 @@ public:
     int serialFailCheck;
     /* end of error checking */ 
 
-    
-    
-
-
-    
-
-    
-
 
     void initReset();
-    
-    
 
-    
 
 };
 
