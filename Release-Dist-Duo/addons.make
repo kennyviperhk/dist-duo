@@ -1,4 +1,3 @@
 ofxIO
 ofxPoco
 ofxSerial
-ofxOMXPlayer
