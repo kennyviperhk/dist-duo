@@ -459,7 +459,7 @@ void ofApp::sendChar(){
 
     vector<uint8_t> hi;
     hi.push_back(0);
-    ofx::IO::ByteBuffer buffer(hi);
+    ofxIO::ByteBuffer buffer(hi);
     if(arduino.size() > 0) {
 	    arduino[0].writeByte(hi[0]);
 	        ofLog() << "send char ";
@@ -507,7 +507,7 @@ void ofApp::sendMoveTo(int b){
 
 
 
-void ofApp::onSerialBuffer(const ofx::IO::SerialBufferEventArgs& args)
+void ofApp::onSerialBuffer(const ofxIO::SerialBufferEventArgs& args)
 {
     // Buffers will show up here when the marker character is found.
     SerialMessage message(args.getBuffer().toString(), "", 500);
@@ -515,7 +515,7 @@ void ofApp::onSerialBuffer(const ofx::IO::SerialBufferEventArgs& args)
     ofLog() << "Has Msg: "<<message.message;
 }
 
-void ofApp::onSerialError(const ofx::IO::SerialBufferErrorEventArgs& args)
+void ofApp::onSerialError(const ofxIO::SerialBufferErrorEventArgs& args)
 {
     // Errors and their corresponding buffer (if any) will show up here.
     SerialMessage message(args.getBuffer().toString(),
@@ -535,7 +535,7 @@ void ofApp::serialSetup(){
       
     //================== Serial ==================
     
-    std::vector<ofx::IO::SerialDeviceInfo> devicesInfo = ofx::IO::SerialDeviceUtils::listDevices();
+    std::vector<ofxIO::SerialDeviceInfo> devicesInfo = ofxIO::SerialDeviceUtils::listDevices();
     
     ofLogNotice("ofApp::setup") << "Connected Devices: ";
 
@@ -556,7 +556,7 @@ void ofApp::serialSetup(){
                             if(portDesc.find("FTDI") != std::string::npos )
             {
                 // Connect to the first matching device.
-                ofx::IO::BufferedSerialDevice device;
+                ofxIO::BufferedSerialDevice device;
 		arduino.push_back(device);
                 bool success = arduino[a].setup(devicesInfo[i], 115200);
                 

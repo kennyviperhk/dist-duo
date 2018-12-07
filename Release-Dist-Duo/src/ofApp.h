@@ -25,16 +25,16 @@ public:
     SerialMessage(): fade(0)
     {
     }
-    
+
     SerialMessage(const std::string& _message,
                   const std::string& _exception,
                   int _fade):
-    message(_message),
-    exception(_exception),
-    fade(_fade)
+        message(_message),
+        exception(_exception),
+        fade(_fade)
     {
     }
-    
+
     std::string message;
     std::string exception;
     int fade;
@@ -67,16 +67,19 @@ public:
     void sendDir(char a);
     void sendMoveTo(int b);
     
-    vector<ofx::IO::BufferedSerialDevice> arduino; // 0 Accel, 1 disc, 2 screen
+    vector<ofxIO::BufferedSerialDevice> arduino; // 0 Accel, 1 disc, 2 screen
    // ofx::IO::BufferedSerialDevice deviceAccel;
       // ofx::IO::BufferedSerialDevice deviceDiscMotor;
    // ofx::IO::BufferedSerialDevice deviceScreenMotor;
 
 
+    ofxIO::BufferedSerialDevice device;
+
     std::vector<SerialMessage> serialMessages;
+
     
-    void onSerialBuffer(const ofx::IO::SerialBufferEventArgs& args);
-    void onSerialError(const ofx::IO::SerialBufferErrorEventArgs& args);
+    void onSerialBuffer(const ofxIO::SerialBufferEventArgs& args);
+    void onSerialError(const ofxIO::SerialBufferErrorEventArgs& args);
     /* end of Serial */
     
     /*video */
