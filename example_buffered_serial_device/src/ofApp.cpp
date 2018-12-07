@@ -9,68 +9,7 @@
 
 void ofApp::setup()
 {
-    // 1. Upload the HaikuGenerator.ino sketch (in this example's Arduino/
-    //    folder) to an Arduino board.
-    // 2. Check the "getDevices" call below to make sure the correct serial
-    //    device is connected. This works with OSX but may require a different
-    //    port name for Linux or Windows.
-    // 3. Run this app.
-
-    int a = 0;
-
-    //================== Serial ==================
-    
-    vector<ofxIO::SerialDeviceInfo> devicesInfo = ofx::IO::SerialDeviceUtils::listDevices();
-    
-    ofLogNotice("ofApp::setup") << "Connected Devices: ";
-    
-    for (std::size_t i = 0; i < devicesInfo.size(); ++i)
-    {
-        ofLogNotice("ofApp::setup") << "\t" << devicesInfo[i];
-    }
-    
-    if (!devicesInfo.empty())
-    {
-        
-        for (std::size_t i = 0; i < devicesInfo.size(); ++i)
-        {
-            string portDesc = devicesInfo[i].getHardwareId();
-            ofLog() << "devicesInfo[i].getHardwareId() : " << devicesInfo[i].getHardwareId();
-            bool success  = false;
-            if(a == 0){
-                success = arduinoA.setup(devicesInfo[i], 115200);  
-            }else if (a == 1){
-                success = arduinoB.setup(devicesInfo[i], 115200);  
-            }
-
-                
-            if(success)
-            {
-                if(a == 0){
-                    arduinoA.unregisterAllEvents(this);
-                    arduinoA.registerAllEvents(this);
-                }else if (a == 1){
-                    arduinoB.unregisterAllEvents(this);
-                    arduinoB.registerAllEvents(this);
-                }
-                    
-                ofLogNotice("ofApp::setup") << "Successfully setup " << devicesInfo[i];
-                    
-                a++;
-                    
-            }
-            else
-            {
-                ofLogNotice("ofApp::setup") << "Unable to setup " << devicesInfo[i];
-            }
-
-        }
-    }
-    else
-    {
-        ofLogNotice("ofApp::setup") << "No devices connected.";
-    }
-    
+    serialSetup();
 }
 
 void ofApp::exit()
@@ -83,7 +22,7 @@ void ofApp::exit()
 
 void ofApp::update(){
 
-       receivedVal = serialRead();
+       receivedVal = serialUpdate();
        if(receivedVal[0] == 0){
            accelVal = receivedVal;
            }else{
@@ -94,34 +33,8 @@ void ofApp::update(){
 
 void ofApp::draw()
 {
-    ofBackground(0);
-
-    ofSetColor(255);
-
-    std::stringstream ss;
-    
-    std::stringstream ss2;
-
-    ss << "         FPS: " << ofGetFrameRate() << endl;
-
-   // for(int i=0; i< arduino.size(); i++){
-    ss << "Connected to: " << arduinoA.port()<< endl;
-        ss << "Connected to: " << arduinoB.port()<< endl;
-    
-    for(int i = 0; i< accelVal.size(); i++){
-    ss << "accelVal from Arduino: " << i << " : "<< accelVal[i] << endl;
-    }
-    
-        for(int i = 0; i< discVal.size(); i++){
-    ss2 << "discVal from Arduino: " << i << " : "<< discVal[i] << endl;
-    }
-
-  //  }
-
-    ofDrawBitmapString(ss.str(), ofVec2f(20, 20));
-    
-        ofDrawBitmapString(ss2.str(), ofVec2f(20, 200));
-
+    serialDraw();
+  
  
 }
 /*
@@ -169,7 +82,7 @@ string ofApp::serialRead(int a){
 */
 
 
-vector<float> ofApp::serialRead(){
+vector<float> ofApp::serialUpdate(){
     
     vector<float> currVal;
     
@@ -177,7 +90,7 @@ vector<float> ofApp::serialRead(){
 
     std::vector<SerialMessage>::iterator iter = serialMessages.begin();
     
-    receivedMsg = "";
+    string receivedMsg = "";
     
     
     while (iter != serialMessages.end())
@@ -311,4 +224,96 @@ void ofApp::sendChar(int a){
     arduinoA.writeByte(hi[0]);
     arduinoB.writeByte(hi[0]);
     ofLog() << "char SEND";
+}
+
+
+void ofApp::serialSetup(){
+
+    
+    int a = 0;
+    
+    //================== Serial ==================
+    
+    vector<ofxIO::SerialDeviceInfo> devicesInfo = ofx::IO::SerialDeviceUtils::listDevices();
+    
+    ofLogNotice("ofApp::setup") << "Connected Devices: ";
+    
+    for (std::size_t i = 0; i < devicesInfo.size(); ++i)
+    {
+        ofLogNotice("ofApp::setup") << "\t" << devicesInfo[i];
+    }
+    
+    if (!devicesInfo.empty())
+    {
+        
+        for (std::size_t i = 0; i < devicesInfo.size(); ++i)
+        {
+            string portDesc = devicesInfo[i].getHardwareId();
+            ofLog() << "devicesInfo[i].getHardwareId() : " << devicesInfo[i].getHardwareId();
+            bool success  = false;
+            if(a == 0){
+                success = arduinoA.setup(devicesInfo[i], 115200);
+            }else if (a == 1){
+                success = arduinoB.setup(devicesInfo[i], 115200);
+            }
+            
+            
+            if(success)
+            {
+                if(a == 0){
+                    arduinoA.unregisterAllEvents(this);
+                    arduinoA.registerAllEvents(this);
+                }else if (a == 1){
+                    arduinoB.unregisterAllEvents(this);
+                    arduinoB.registerAllEvents(this);
+                }
+                
+                ofLogNotice("ofApp::setup") << "Successfully setup " << devicesInfo[i];
+                
+                a++;
+                
+            }
+            else
+            {
+                ofLogNotice("ofApp::setup") << "Unable to setup " << devicesInfo[i];
+            }
+            
+        }
+    }
+    else
+    {
+        ofLogNotice("ofApp::setup") << "No devices connected.";
+    }
+    
+}
+
+void ofApp::serialDraw(){
+    ofBackground(0);
+    
+    ofSetColor(255);
+    
+    std::stringstream ss;
+    
+    std::stringstream ss2;
+    
+    ss << "         FPS: " << ofGetFrameRate() << endl;
+    
+    // for(int i=0; i< arduino.size(); i++){
+    ss << "Connected to: " << arduinoA.port()<< endl;
+    ss << "Connected to: " << arduinoB.port()<< endl;
+    
+    for(int i = 0; i< accelVal.size(); i++){
+        ss << "accelVal from Arduino: " << i << " : "<< accelVal[i] << endl;
+    }
+    
+    for(int i = 0; i< discVal.size(); i++){
+        ss2 << "discVal from Arduino: " << i << " : "<< discVal[i] << endl;
+    }
+    
+    //  }
+    
+    ofDrawBitmapString(ss.str(), ofVec2f(20, 20));
+    
+    ofDrawBitmapString(ss2.str(), ofVec2f(20, 200));
+
 }

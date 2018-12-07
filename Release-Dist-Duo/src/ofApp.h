@@ -13,7 +13,7 @@
 #endif
 
 
-#define FRAMERATE 25
+#define FRAMERATE 60
 #define VIDEO_DISPLAY_SCALE 0.2
 
 #define AUTO_RESTART 0
@@ -25,20 +25,21 @@ public:
     SerialMessage(): fade(0)
     {
     }
-
+    
     SerialMessage(const std::string& _message,
                   const std::string& _exception,
                   int _fade):
-        message(_message),
-        exception(_exception),
-        fade(_fade)
+    message(_message),
+    exception(_exception),
+    fade(_fade)
     {
     }
-
+    
     std::string message;
     std::string exception;
     int fade;
 };
+
 
 
 class ofApp : public ofBaseApp{
@@ -58,28 +59,27 @@ public:
     /*Serial */
     
     void serialSetup();
-    
-    vector<float> serialRead();
+    vector<float> serialUpdate();
+    void serialDraw();
+
     vector<float> receivedVal;
-    string receivedMsg;
-
-    void sendChar(); 
-    void sendDir(char a);
-    void sendMoveTo(int b);
+    vector<float> accelVal;
+    vector<float> discVal;
     
-    vector<ofxIO::BufferedSerialDevice> arduino; // 0 Accel, 1 disc, 2 screen
-   // ofx::IO::BufferedSerialDevice deviceAccel;
-      // ofx::IO::BufferedSerialDevice deviceDiscMotor;
-   // ofx::IO::BufferedSerialDevice deviceScreenMotor;
-
-
-    ofxIO::BufferedSerialDevice device;
-
+    ofxIO::BufferedSerialDevice arduinoA; // 0 Accel, 1 disc, 2 screen
+    ofxIO::BufferedSerialDevice arduinoB; // 0 Accel, 1 disc, 2 screen
+    ofxIO::BufferedSerialDevice arduinoC; // 0 Accel, 1 disc, 2 screen
+    
     std::vector<SerialMessage> serialMessages;
-
+    
+    void sendChar(int a);
+    
     
     void onSerialBuffer(const ofxIO::SerialBufferEventArgs& args);
     void onSerialError(const ofxIO::SerialBufferErrorEventArgs& args);
+    
+    void sendMoveTo(int val);
+    void sendDir(int val);
     /* end of Serial */
     
     /*video */
@@ -136,6 +136,8 @@ public:
     void initReset();
 
 
+    
+    bool isLeftEye;
 };
 
 

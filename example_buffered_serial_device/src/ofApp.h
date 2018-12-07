@@ -32,21 +32,25 @@ public:
 class ofApp: public ofBaseApp
 {
 public:
-    void setup() override;
+    void setup() ;
     void update();
-    void draw() override;
-    void exit() override;
+    void draw() ;
+    void exit() ;
+    
+    void serialSetup();
+    vector<float> serialUpdate();
+    void serialDraw();
     
     void keyReleased(int key);
 
     void onSerialBuffer(const ofxIO::SerialBufferEventArgs& args);
     void onSerialError(const ofxIO::SerialBufferErrorEventArgs& args);
 
-    vector<float> serialRead();
+
     vector<float> receivedVal;
     vector<float> accelVal;
     vector<float> discVal;
-    string receivedMsg;
+
     
     ofxIO::BufferedSerialDevice arduinoA; // 0 Accel, 1 disc, 2 screen
     ofxIO::BufferedSerialDevice arduinoB; // 0 Accel, 1 disc, 2 screen
