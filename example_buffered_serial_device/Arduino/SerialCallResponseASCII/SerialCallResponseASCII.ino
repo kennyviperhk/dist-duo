@@ -29,9 +29,9 @@
  */
 
 int firstSensor = 0;    // first analog sensor
-int secondSensor = 0;   // second analog sensor
-int thirdSensor = 0;    // digital sensor
-int inByte = 0;         // incoming serial byte
+float secondSensor = 0;   // second analog sensor
+float thirdSensor = 0;    // digital sensor
+float inByte = 0;         // incoming serial byte
 
 void setup()
 {
@@ -55,7 +55,7 @@ void loop()
     // read first analog input:
     firstSensor = analogRead(A0);
     // read second analog input:
-    secondSensor = analogRead(A1);
+    secondSensor ++;
     // read  switch, map it to 0 or 255L
     thirdSensor = map(digitalRead(2), 0, 1, 0, 255);  
     // send sensor values:

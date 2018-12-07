@@ -87,7 +87,7 @@ void ofApp::update(){
        if(receivedVal[0] == 0){
            accelVal = receivedVal;
            }else{
-             discVal = receivedVal;  
+        discVal = receivedVal;
                }
     
 }
@@ -229,20 +229,18 @@ vector<float> ofApp::serialRead(){
     bool isAccelVal = false;
     for(int i =0 ; i< receivedMsg.size(); i++){
         if(receivedMsg.find("euler") != std::string::npos){
-            receivedMsg = receivedMsg.erase(0,3);
-            //  ofLog() << "1. receivedMsg.erase(0,3) " << receivedMsg;
+            receivedMsg = receivedMsg.erase(0,5);
             receivedMsg = receivedMsg.erase(0,1);
-            // ofLog() << "2. receivedMsg.erase(0,1) " << receivedMsg;
+            ofLog() << "euler:" << receivedMsg;
             
             isAccelVal = true;
         }else if(receivedMsg.find("hz") != std::string::npos){
-            receivedMsg = receivedMsg.erase(0,3);
-            //  ofLog() << "1. receivedMsg.erase(0,3) " << receivedMsg;
+            receivedMsg = receivedMsg.erase(0,2);
+            //  ofLog() << "1. hz(0,2) " << receivedMsg;
             receivedMsg = receivedMsg.erase(0,1);
-            // ofLog() << "2. receivedMsg.erase(0,1) " << receivedMsg;
+            ofLog() << "Hz:" << receivedMsg;
             isAccelVal = false;
-            
-            sendChar(1);
+
         }
     }
     
@@ -310,5 +308,7 @@ void ofApp::sendChar(int a){
     vector<uint8_t> hi;
     hi.push_back(a);
     ofx::IO::ByteBuffer buffer(hi);
+    arduinoA.writeByte(hi[0]);
     arduinoB.writeByte(hi[0]);
+    ofLog() << "char SEND";
 }
