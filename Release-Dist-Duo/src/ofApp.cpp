@@ -4,7 +4,7 @@
 void ofApp::setup(){
     isLeftEye = true;
     debugMode = false;
-
+    
     ofSetFrameRate(FRAMERATE);
     
     initReset();
@@ -12,7 +12,7 @@ void ofApp::setup(){
     videoPlayerSetup();
     
     
-
+    
     ofHideCursor();
     
     //=====DEBUG =====
@@ -37,8 +37,6 @@ void ofApp::initReset(){
     
 }
 
-
-
 //--------------------------------------------------------------
 void ofApp::update(){
     
@@ -47,12 +45,12 @@ void ofApp::update(){
     receivedVal = serialUpdate();
     if(receivedVal[0] == 0){
         accelVal = receivedVal;
-      //  currAngle = accelVal[1];
+        //  currAngle = accelVal[1];
         currAngle = accelVal[1];
     }else{
         discVal = receivedVal;
     }
-
+    
     //================== Video ==================
 #ifdef USE_PI
     
@@ -71,7 +69,7 @@ void ofApp::update(){
         leftSide = !leftSide;
         // currMoveTo = ofMap(mouseX,0,ofGetWidth(),0,95);
         hasToMove = false;
-      //  sendMoveTo(currMoveTo);
+        //  sendMoveTo(currMoveTo);
         prevSwingTime = currTime;
     }
     if( currTime - prevAngleTime >= 500){
@@ -143,7 +141,7 @@ void ofApp::videoMixing(){
         ofPopMatrix();
     }
     else{
-
+        
         float var = 6;
         ofBackground(0);
         ofSetColor(255);
@@ -152,7 +150,7 @@ void ofApp::videoMixing(){
         ofTranslate(finalVid.getWidth()/2, finalVid.getHeight()/2);
         ofRotateZDeg(currAngle);
         int valToOffset =0;
-     //  valToOffset =  ofMap(mouseX, 0, ofGetWidth(), -finalVid.getWidth()*2, finalVid.getWidth()*2);
+        //  valToOffset =  ofMap(mouseX, 0, ofGetWidth(), -finalVid.getWidth()*2, finalVid.getWidth()*2);
         ofTranslate(-finalVid.getWidth()/2 + valToOffset, -finalVid.getHeight()/2);
         ofTranslate(finalVid.getWidth()/2*var, finalVid.getHeight()/2*var);
         
@@ -165,12 +163,12 @@ void ofApp::videoMixing(){
         }
         float modX;
         if(isLeftEye){
-                    modX = ofMap(currAngle,-topAngle,topAngle,0,-2500);
+            modX = ofMap(currAngle,-topAngle,topAngle,0,-2500);
         }else{
-                    modX = ofMap(currAngle,-topAngle,topAngle,0,2500);
+            modX = ofMap(currAngle,-topAngle,topAngle,0,2500);
         }
-                    float modY =ofMap(abs(currAngle),0,90,0,500);
-
+        float modY =ofMap(abs(currAngle),0,90,0,500);
+        
         
         if(vidChannel == 1){
             ofTranslate(modX, vid1YPos + modY);
@@ -271,49 +269,49 @@ void ofApp::draw(){
         serialDraw();
         
         /*
-        std::stringstream ss;
-        
-        ss << "         FPS: " << ofGetFrameRate() << endl;
-        
-        ss << "Connected to: " << arduinoA.port() << endl;
-        ss << "Connected to: " << arduinoB.port() << endl;
-        
-        
-        ofDrawBitmapString(ss.str(), ofVec2f(20, 20));
-        
-        int x = 20;
-        int y = 50;
-        int height = 20;
-        
-        auto iter = serialMessages.begin();
-        
-        // Cycle through each of our messages and delete those that have expired.
-        while (iter != serialMessages.end())
-        {
-            iter->fade -= 50;
-            
-            if (iter->fade < 0)
-            {
-                iter = serialMessages.erase(iter);
-            }
-            else
-            {
-                ofSetColor(255, ofClamp(iter->fade, 0, 255));
-                ofDrawBitmapString(iter->message, ofVec2f(x, y));
-                
-                y += height;
-                
-                if (!iter->exception.empty())
-                {
-                    ofSetColor(255, 0, 0, ofClamp(iter->fade, 0, 255));
-                    ofDrawBitmapString(iter->exception, ofVec2f(x + height, y));
-                    y += height;
-                }
-                
-                ++iter;
-            }
-        }
-        */
+         std::stringstream ss;
+         
+         ss << "         FPS: " << ofGetFrameRate() << endl;
+         
+         ss << "Connected to: " << arduinoA.port() << endl;
+         ss << "Connected to: " << arduinoB.port() << endl;
+         
+         
+         ofDrawBitmapString(ss.str(), ofVec2f(20, 20));
+         
+         int x = 20;
+         int y = 50;
+         int height = 20;
+         
+         auto iter = serialMessages.begin();
+         
+         // Cycle through each of our messages and delete those that have expired.
+         while (iter != serialMessages.end())
+         {
+         iter->fade -= 50;
+         
+         if (iter->fade < 0)
+         {
+         iter = serialMessages.erase(iter);
+         }
+         else
+         {
+         ofSetColor(255, ofClamp(iter->fade, 0, 255));
+         ofDrawBitmapString(iter->message, ofVec2f(x, y));
+         
+         y += height;
+         
+         if (!iter->exception.empty())
+         {
+         ofSetColor(255, 0, 0, ofClamp(iter->fade, 0, 255));
+         ofDrawBitmapString(iter->exception, ofVec2f(x + height, y));
+         y += height;
+         }
+         
+         ++iter;
+         }
+         }
+         */
         
     }else{
         
@@ -374,7 +372,6 @@ void ofApp::keyReleased(int key){
             
     }
     
-    
 }
 
 //--------------------------------------------------------------
@@ -411,9 +408,9 @@ vector<float> ofApp::serialUpdate(){
         }
         else
         {
-
+            
             receivedMsg = iter->message;
-
+            
             if (!iter->exception.empty())
             {
                 // y += height;
@@ -425,10 +422,10 @@ vector<float> ofApp::serialUpdate(){
     
     bool isAccelVal = false;
     for(int i =0 ; i< receivedMsg.size(); i++){
-        if(receivedMsg.find("euler") != std::string::npos){
-            receivedMsg = receivedMsg.erase(0,5);
+        if(receivedMsg.find("ypr") != std::string::npos){
+            receivedMsg = receivedMsg.erase(0,3);
             receivedMsg = receivedMsg.erase(0,1);
-            ofLog() << "euler:" << receivedMsg;
+            ofLog() << "ypr:" << receivedMsg;
             
             isAccelVal = true;
         }else if(receivedMsg.find("hz") != std::string::npos){
@@ -475,7 +472,7 @@ void ofApp::sendChar(int a){
     arduinoA.writeByte(hi[0]);
     arduinoB.writeByte(hi[0]);
     ofLog() << "send char ";
-
+    
 }
 
 void ofApp::sendDir(int a){
@@ -492,10 +489,10 @@ void ofApp::sendDir(int a){
     // deviceMotor.writeByte(hi);
     
     
-  //  for(int i=0;i<1000; i++){
-        arduinoA.writeByte(a);
-        arduinoB.writeByte(a);
-  //  }
+    //  for(int i=0;i<1000; i++){
+    arduinoA.writeByte(a);
+    arduinoB.writeByte(a);
+    //  }
     
     /*for(int i=0;i<1000; i++){
      deviceDiscMotor.writeByte(a);
@@ -703,3 +700,4 @@ void ofApp::serialDraw(){
     
     
 }
+
