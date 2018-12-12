@@ -54,17 +54,18 @@ public:
     void keyPressed(int key);
     void keyReleased(int key);
     void mouseMoved(int x, int y );
-
-
+    
+    
     /*Serial */
     
     void serialSetup();
     vector<float> serialUpdate();
     void serialDraw();
-
+    
     vector<float> receivedVal;
     vector<float> accelVal;
     vector<float> discVal;
+    vector<float> screenVal;
     
     ofxIO::BufferedSerialDevice arduinoA; // 0 Accel, 1 disc, 2 screen
     ofxIO::BufferedSerialDevice arduinoB; // 0 Accel, 1 disc, 2 screen
@@ -73,7 +74,7 @@ public:
     std::vector<SerialMessage> serialMessages;
     
     void sendChar(int a);
-    
+    void sendCommand(int ar, string s);
     
     void onSerialBuffer(const ofxIO::SerialBufferEventArgs& args);
     void onSerialError(const ofxIO::SerialBufferErrorEventArgs& args);
@@ -86,7 +87,7 @@ public:
     
     void videoPlayerSetup();
     void videoMixing();
-        
+    
 #ifdef USE_PI
     ofxOMXPlayer vid1;
     ofxOMXPlayer vid2;
@@ -97,8 +98,8 @@ public:
     
     float vidDisplayScale;
     ofFbo finalVid;
-        
-        
+    
+    
     long prevSwingTime;
     long prevAngleTime;
     float prevAngle;
@@ -118,27 +119,58 @@ public:
     bool changeVid;
     int vidChannel;
     
-    
+    bool isEye;
+    void pushWheelToRight(int amount);
+    void pushWheelToLeft(int amount);
+    void changeSpeed(int amount);
+    long swingMillis;
+    long swingInterval;
     /*end of video */
     
-/* debug */
+    /* debug */
     bool debugMode;
-
-/* end of debug */
-
+    
+    /* end of debug */
+    
     /* error checking */
     
-        
+    
     int serialFailCheck;
-    /* end of error checking */ 
-
-
+    /* end of error checking */
+    
+    
     void initReset();
-
-
+    
+    
     
     bool isLeftEye;
+    
+    
+    void testConnection();
+    long testConnectionMillis;
+    bool getRespondsFromDiscArduino;
+    bool getRespondsFromScreenArduino;
+    int testConnectionStage;
+    
+
+    
+    
+    
+    /* Disc Motor*/
+    int isDiscArduino;
+    int isScreenArduino;
+    int isAccelArduino;
+    bool isClockWise;
+    bool prevDirection;
+    float getRPM;
+    
+    bool nextScreenTrigger;
+
+    int topAngle;
+    bool screenIsOnRight;
+    bool screenIsOnLeft;
 };
+
 
 
 

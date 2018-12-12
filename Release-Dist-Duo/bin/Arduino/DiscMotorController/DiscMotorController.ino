@@ -8,7 +8,7 @@
 
 long input_value[Input_size];
 
-int brightness = 100;    // how bright the motorPWMPin is
+int power = 50;    // how bright the motorPWMPin is
 int increment = 10;    // how many points to fade the motorPWMPin by
 
 bool clockwise = true;
@@ -33,6 +33,7 @@ int changeDirectionStage = 0;
 unsigned long timestamp = 0L ;
 long prev_pulses = 0L ;
 int num_of_poles = 3;
+float rpmReading;
 
 // the setup routine runs once when you press reset:
 void setup() {
@@ -43,12 +44,12 @@ void setup() {
   pinMode(motorDirPin, OUTPUT);
 
   Serial.begin(115200);
-  analogWrite(motorPWMPin, 50);
-  delay(1000);
-  analogWrite(motorPWMPin, 30);
-  delay(1000);
+ // analogWrite(motorPWMPin, 50);
+ // delay(1000);
   analogWrite(motorPWMPin, 40);
   delay(1000);
+  analogWrite(motorPWMPin, 0);
+ // delay(1000);
 
 
   //
@@ -66,13 +67,13 @@ void loop() {
   unsigned long currentMillis = millis();
 
   /* Error Checking */
-  if (brightness <= 0)
+  if (power <= 0)
   {
-    brightness = 0;
+    power = 0;
   }
-  if (brightness >= 255)
+  if (power >= 255)
   {
-    brightness = 255;
+    power = 255;
   }
 
   if (clockwise) {
@@ -116,7 +117,7 @@ void loop() {
       // save the last time you blinked the LED
       previousMillis = currentMillis;
 
-      brightness = random(40, 60);
+      power = random(40, 60);
 
       if (quick) {
         intervals = random(500, 800);
@@ -129,7 +130,7 @@ void loop() {
         digitalWrite(motorDirPin, LOW);
         if (quick) {
        //   Serial.println("slow");
-          analogWrite(motorPWMPin, brightness);
+          analogWrite(motorPWMPin, power);
               oneSide = !oneSide;
         } else {
        //   Serial.println("quick");
@@ -142,7 +143,7 @@ void loop() {
         digitalWrite(motorDirPin, HIGH);
         if (quick) {
         //  Serial.println("slow");
-          analogWrite(motorPWMPin, brightness);
+          analogWrite(motorPWMPin, power);
 
         } else {
         //  Serial.println("quick");
@@ -174,14 +175,20 @@ void loop() {
       long now_pulses = get_pulsecount () ;  // sample the count
       long count = now_pulses - prev_pulses ; // take difference from last sample
       prev_pulses = now_pulses ;  // update the previous value
+rpmReading = count * 60.0 / num_of_poles;
 
-      Serial.println (count * 60.0 / num_of_poles) ;
+       Serial.print("hz\t");
+       Serial.print(rpmReading);
+        Serial.print("\t");
+        Serial.print(clockwise);
+        Serial.print("\t");
+        Serial.println(power);
     }
 
   }
 
-  analogWrite(motorPWMPin, brightness);
-  //Serial.println(brightness);
+  analogWrite(motorPWMPin, power);
+  //Serial.println(power);
 
 
   serial_decode();

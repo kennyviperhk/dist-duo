@@ -5,7 +5,7 @@
 
 long input_value[Input_size];
 
-int brightness = 80;    // how bright the motorPWMPin is
+int power = 80;    // how bright the motorPWMPin is
 int increment = 10;    // how many points to fade the motorPWMPin by
 
 bool oneSide = true;
@@ -43,17 +43,17 @@ void setup() {
 
 // the loop routine runs over and over again forever:
 void loop() {
-  // set the brightness of pin 9:
+  // set the power of pin 9:
 
-  if (brightness <= 0)
+  if (power <= 0)
   {
-    brightness = 0;
+    power = 0;
   }
-  if (brightness >= 255)
+  if (power >= 255)
   {
-    brightness = 255;
+    power = 255;
   }
-  analogWrite(motorPWMPin, brightness);
+  analogWrite(motorPWMPin, power);
 
   unsigned long currentMillis = millis();
 
@@ -61,7 +61,7 @@ void loop() {
     // save the last time you blinked the LED
     previousMillis = currentMillis;
 
-    brightness = random(40, 60);
+    power = random(40, 60);
 
     if (quick) {
       intervals = random(500, 800);
@@ -74,7 +74,7 @@ void loop() {
       digitalWrite(motorDirPin, LOW);
       if (quick) {
         Serial.println("slow");
-        analogWrite(motorPWMPin, brightness);
+        analogWrite(motorPWMPin, power);
             oneSide = !oneSide;
       } else {
         Serial.println("quick");
@@ -87,7 +87,7 @@ void loop() {
       digitalWrite(motorDirPin, HIGH);
       if (quick) {
         Serial.println("slow");
-        analogWrite(motorPWMPin, brightness);
+        analogWrite(motorPWMPin, power);
   
       } else {
         Serial.println("quick");

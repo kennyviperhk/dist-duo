@@ -80,7 +80,6 @@ void char_decode(int inChar)
     //            {
     //              Serial.println("overflow(end)");
     //            }
-setSpeedController();
 
     inString = "";   // clear the string buffer for new input:
     current_index = 0;// reset the index
@@ -88,51 +87,37 @@ setSpeedController();
     update_flag = true;
 
   }
-  else if (inChar == 'C' || inChar == 'c') //Check if online
-  {
-    //DO STH HERE
-    inString = "";   // clear the string buffer for new input:
-
-    clockwise = !clockwise;
-
-    Serial.print("change direction");
-    if (clockwise) {
-      Serial.print("CW");
-    } else {
-      Serial.print("AWC");
-    }
-    update_flag = true;
-    exclude_print_val = true;
-  }
-  else if (inChar == 'E' || inChar == 'e') //Check if online
-  {
-    //DO STH HERE
-    inString = "";   // clear the string buffer for new input:
-
-    enableMotor = !enableMotor;
-
-    Serial.print("Enable / Disable : ");
-    if (enableMotor) {
-      Serial.print("Enable M");
-    } else {
-      Serial.print("Disable M");
-    }
-
-
-    update_flag = true;
-    exclude_print_val = true;
-  }
   else if (inChar == 'P' || inChar == 'p') //Check if online
   {
     inString = "";   // clear the string buffer for new input:
-    Serial.print("Disc Motor");
+    Serial.print("Screen Motor");
     update_flag = true;
     exclude_print_val = true;
   }
-    else if (inChar == 'Q' || inChar == 'q') 
+  else if (inChar == 'L' || inChar == 'l') //Check if online
   {
     inString = "";   // clear the string buffer for new input:
-    enableMotor = false;
+    Serial.print("Left");
+    pos = -400;
+    update_flag = true;
+    exclude_print_val = true;
+    
+  }
+  else if (inChar == 'R' || inChar == 'r') //Check if online
+  {
+    inString = "";   // clear the string buffer for new input:
+    Serial.print("Right");
+    pos = 400;
+    update_flag = true;
+    exclude_print_val = true;
+  }
+    else if (inChar == 'M' || inChar == 'm') //Check if online
+  {
+    inString = "";   // clear the string buffer for new input:
+    Serial.print("Middle");
+    quickCalibration = true;
+    calibration = true;
+     pos = 0;
     update_flag = true;
     exclude_print_val = true;
   }
