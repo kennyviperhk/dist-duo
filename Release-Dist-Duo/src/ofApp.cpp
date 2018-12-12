@@ -122,8 +122,9 @@ void ofApp::update(){
     if(receivedVal[0] == 0){
         accelVal = receivedVal;
         //  currAngle = accelVal[1];
-        currAngle = accelVal[3];
+        currAngle = accelVal[1];
     }else if(receivedVal[0] == 1){
+        
         discVal = receivedVal;
     }else{
         screenVal = receivedVal;
