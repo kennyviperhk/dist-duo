@@ -135,12 +135,12 @@ void check_update()   //Check update flag and write value when string finish
 
     if (exclude_print_val == false) {
       //print all value
-      Serial.print("hz\t");
+      //Serial.print("hz\t");
       for (int index = 0; index < Input_size; index++)
       {
 
-        Serial.print(input_value[index]);
-        Serial.print("\t");
+       // Serial.print(input_value[index]);
+       // Serial.print("\t");
 
       }
 

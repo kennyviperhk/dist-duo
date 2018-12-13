@@ -13,7 +13,7 @@
 #endif
 
 
-#define FRAMERATE 30
+#define FRAMERATE 40
 #define VIDEO_DISPLAY_SCALE 0.2
 
 #define AUTO_RESTART 0

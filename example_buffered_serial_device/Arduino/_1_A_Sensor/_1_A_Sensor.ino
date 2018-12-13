@@ -50,7 +50,7 @@ unsigned long previousMillis = 0;        // will store last time LED was updated
 // constants won't change :
 const long interval = 900000;
 //const long sendInterval = 33;
-const long sendInterval = 20;
+const long sendInterval = 16.67;
 //const long interval = 9000;
 
 

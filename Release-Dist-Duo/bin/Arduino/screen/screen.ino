@@ -41,7 +41,7 @@ void loop() {
 
 
   if (calibration) {
-    Serial.println(outputVal);
+   // Serial.println(outputVal);
 
     if (outputVal > encoderMidPoint)
     {

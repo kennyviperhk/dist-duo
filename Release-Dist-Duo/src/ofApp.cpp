@@ -222,7 +222,7 @@ void ofApp::videoMixing(){
     }
     else{
         
-        float var = 5;
+        float var = 3.5;
         ofBackground(0);
         ofSetColor(255);
         ofPushMatrix();
@@ -243,22 +243,23 @@ void ofApp::videoMixing(){
         }
         float modX;
         if(isLeftEye){
-            modX = ofMap(currAngle,-topAngle,topAngle,-100,-1400);
-        }else{
             modX = ofMap(currAngle,-topAngle,topAngle,100,1400);
+        }else{
+            modX = ofMap(currAngle,-topAngle,topAngle,-100,-1400);
+
         }
         //
         
-        // float modY = ofMap(mouseX, 0,ofGetWidth(), -400, 400);
+        // float modY = ofMap(mouseX, 0,ofGetWidth(), -800, 800);
         // ofLog()<< " modY " << modY;
         if(isEye){
-            vid1YPos = 1200 +129;
-            vid2YPos = 1200 -4;
-            //  ofLog()<< "A" << vidChannel;
+            vid1YPos = 1200 - 302;
+            vid2YPos = 1200 - 360;
+          //    ofLog()<< "A" << vidChannel;
         }else{ //turn
-            vid1YPos = 1200 +129;
-            vid2YPos = 1200 -4;
-            //  ofLog()<< "B" << vidChannel;
+            vid1YPos = 1200 - 302;
+            vid2YPos = 1200 - 360;
+           //   ofLog()<< "B" << vidChannel;
         }
         if(vidChannel == 1){
             ofTranslate(modX, vid1YPos);
