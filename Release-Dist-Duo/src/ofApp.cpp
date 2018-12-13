@@ -10,7 +10,7 @@ void ofApp::setup(){
     initReset();
     serialSetup();
     videoPlayerSetup();
-
+    
     //=====DEBUG =====
     serialFailCheck =0;
 }
@@ -65,7 +65,7 @@ void ofApp::update(){
         
     }else if(currAngle< -topAngle){
         sendCommand(isScreenArduino, "l");
-                    screenIsOnLeft = true;
+        screenIsOnLeft = true;
     }
     if(screenIsOnRight && currAngle < topAngle)
     {
@@ -79,37 +79,37 @@ void ofApp::update(){
     }
     swingInterval = ofRandom(2500,3500);
     if(currTime - swingMillis > swingInterval && abs(angleChangeSpeed) < 2 && abs(currAngle) < topAngle){
-               swingMillis = currTime;
-         if(angleChangeSpeed > 8 || abs(currAngle) > topAngle){
-             swingInterval+= 1500;
-         }
-         else{
- 
-       // int swingAmount = ofMap(mouseX, 0, ofGetWidth(), 50, 130);
-      //  ofLog() << "swingAmount : " << swingAmount;
-             int speedToChange;
-             float angleFactor;
-             if(isLeftEye){
-                 int maxPower = 34;
-                 speedToChange = ofMap(abs(angleChangeSpeed),0,10,maxPower,30);
-                 //angleFactor = ofMap(abs(currAngle),0,topAngle,1,0.5);
+        swingMillis = currTime;
+        if(angleChangeSpeed > 8 || abs(currAngle) > topAngle){
+            swingInterval+= 1500;
+        }
+        else{
+            
+            // int swingAmount = ofMap(mouseX, 0, ofGetWidth(), 50, 130);
+            //  ofLog() << "swingAmount : " << swingAmount;
+            int speedToChange;
+            float angleFactor;
+            if(isLeftEye){
+                int maxPower = 34;
+                speedToChange = ofMap(abs(angleChangeSpeed),0,10,maxPower,30);
+                //angleFactor = ofMap(abs(currAngle),0,topAngle,1,0.5);
                 // speedToChange = speedToChange * angleFactor;
-                 if(speedToChange >= maxPower){
-                     speedToChange = maxPower;
-                 }
-             }
-             else{
-                 speedToChange = ofMap(abs(angleChangeSpeed),0,10,80,40);
-                 if(speedToChange >= 80){
-                     speedToChange = 80;
-                 }
-             }
-        changeSpeed(speedToChange);
-        ofLog() << "speedToChange : " << speedToChange;
-         }
+                if(speedToChange >= maxPower){
+                    speedToChange = maxPower;
+                }
+            }
+            else{
+                speedToChange = ofMap(abs(angleChangeSpeed),0,10,80,40);
+                if(speedToChange >= 80){
+                    speedToChange = 80;
+                }
+            }
+            changeSpeed(speedToChange);
+            ofLog() << "speedToChange : " << speedToChange;
+        }
     }
-
- 
+    
+    
     
     if(debugMode){
         ofShowCursor();
@@ -124,7 +124,6 @@ void ofApp::update(){
         //  currAngle = accelVal[1];
         currAngle = accelVal[1];
     }else if(receivedVal[0] == 1){
-        
         discVal = receivedVal;
     }else{
         screenVal = receivedVal;
@@ -195,7 +194,7 @@ void ofApp::update(){
 
 void ofApp::videoMixing(){
     topAngle = 20;
-
+    
     if(mixingMode ==0){
         
         ofBackground(0);
@@ -249,16 +248,16 @@ void ofApp::videoMixing(){
         }
         //
         
-       // float modY = ofMap(mouseX, 0,ofGetWidth(), -400, 400);
-       // ofLog()<< " modY " << modY;
+        // float modY = ofMap(mouseX, 0,ofGetWidth(), -400, 400);
+        // ofLog()<< " modY " << modY;
         if(isEye){
             vid1YPos = 1200 +129;
             vid2YPos = 1200 -4;
-          //  ofLog()<< "A" << vidChannel;
+            //  ofLog()<< "A" << vidChannel;
         }else{ //turn
             vid1YPos = 1200 +129;
             vid2YPos = 1200 -4;
-          //  ofLog()<< "B" << vidChannel;
+            //  ofLog()<< "B" << vidChannel;
         }
         if(vidChannel == 1){
             ofTranslate(modX, vid1YPos);
@@ -365,7 +364,7 @@ void ofApp::draw(){
         ofPopMatrix();
         
         serialDraw();
-
+        
     }else{
         
         ofSetRectMode(OF_RECTMODE_CORNER);
@@ -466,7 +465,7 @@ vector<float> ofApp::serialUpdate(){
     while (iter != serialMessages.end())
     {
         
-        iter->fade -= 50;
+        iter->fade -= 99;
         
         if (iter->fade < 0)
         {
@@ -500,21 +499,29 @@ vector<float> ofApp::serialUpdate(){
             receivedMsg = receivedMsg.erase(0,2);
             //  ofLog() << "1. hz(0,2) " << receivedMsg;
             receivedMsg = receivedMsg.erase(0,1);
+            if(debugMode){
             ofLog() << "Hz:" << receivedMsg;
+            }
             isDiscVal = true;
         }else if(receivedMsg.find("screen") != std::string::npos){
             receivedMsg = receivedMsg.erase(0,6);
             //  ofLog() << "1. hz(0,2) " << receivedMsg;
             receivedMsg = receivedMsg.erase(0,1);
+            if(debugMode){
             ofLog() << "Screen:" << receivedMsg;
+            }
             isScreenVal = true;
         }
         if(receivedMsg.find("Disc") != std::string::npos){
-            ofLog () << "is here" <<receivedMsg;
+            if(debugMode){
+                ofLog () << "is here" <<receivedMsg;
+            }
             getRespondsFromDiscArduino = true;
         }
         if(receivedMsg.find("Screen") != std::string::npos){
-            ofLog () << "is here" <<receivedMsg;
+            if(debugMode){
+                         ofLog () << "is here" <<receivedMsg;
+            }
             getRespondsFromScreenArduino = true;
         }
         
@@ -599,7 +606,7 @@ void ofApp::sendMoveTo(int b){
 
 void ofApp::onSerialBuffer(const ofxIO::SerialBufferEventArgs& args)
 {
-    ofLog() << args.buffer().toString();
+  //  ofLog() << args.buffer().toString();
     
     // Buffers will show up here when the marker character is found.
     SerialMessage message(args.buffer().toString(), "", 500);
@@ -898,15 +905,16 @@ void ofApp::pushWheelToLeft(int amount){
 }
 
 
-    void ofApp::changeSpeed(int amount){
-        
-        isClockWise = !isClockWise;
-        string s = "11-" + ofToString(amount) + "-";
-        sendCommand(isDiscArduino, s);
-    }
+void ofApp::changeSpeed(int amount){
     
+    isClockWise = !isClockWise;
+    string s = "11-" + ofToString(amount) + "-";
+    sendCommand(isDiscArduino, s);
+}
 
-    
+
+
+
 
 
 
