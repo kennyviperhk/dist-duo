@@ -50,8 +50,6 @@ public:
     void draw();
     void exit();
     
-    
-    void keyPressed(int key);
     void keyReleased(int key);
     void mouseMoved(int x, int y );
     
@@ -79,8 +77,7 @@ public:
     void onSerialBuffer(const ofxIO::SerialBufferEventArgs& args);
     void onSerialError(const ofxIO::SerialBufferErrorEventArgs& args);
     
-    void sendMoveTo(int val);
-    void sendDir(int val);
+
     /* end of Serial */
     
     /*video */

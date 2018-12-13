@@ -57,25 +57,28 @@ void ofApp::update(){
         prevDirection = isClockWise;
     }
     
-    if(currAngle > topAngle ){
-        if(nextScreenTrigger){
+    if(currAngle > topAngle && nextScreenTrigger){
             sendCommand(isScreenArduino, "r");
             screenIsOnRight = true;
-        }
-        
-    }else if(currAngle< -topAngle){
+            nextScreenTrigger = false;
+    
+    }else if(currAngle< -topAngle && nextScreenTrigger){
         sendCommand(isScreenArduino, "l");
         screenIsOnLeft = true;
+        nextScreenTrigger = false;
     }
-    if(screenIsOnRight && currAngle < topAngle)
+    
+    if(screenIsOnRight && currAngle < topAngle && !nextScreenTrigger)
     {
         sendCommand(isScreenArduino, "m");
         screenIsOnRight = false;
+        nextScreenTrigger = true;
     }
-    if(screenIsOnLeft && currAngle > -topAngle)
+    if(screenIsOnLeft && currAngle > -topAngle && !nextScreenTrigger)
     {
         sendCommand(isScreenArduino, "m");
         screenIsOnLeft = false;
+        nextScreenTrigger = true;
     }
     swingInterval = ofRandom(2500,3500);
     if(currTime - swingMillis > swingInterval && abs(angleChangeSpeed) < 2 && abs(currAngle) < topAngle){
@@ -108,9 +111,7 @@ void ofApp::update(){
             ofLog() << "speedToChange : " << speedToChange;
         }
     }
-    
-    
-    
+
     if(debugMode){
         ofShowCursor();
     }else{
@@ -374,20 +375,6 @@ void ofApp::draw(){
     
 }
 
-//--------------------------------------------------------------
-void ofApp::keyPressed(int key){
-    
-    switch(key){
-        case 'q':
-            sendDir('l');
-            break;
-        case 'w':
-            sendDir('r');
-            break;
-            
-    }
-    
-}
 
 //--------------------------------------------------------------
 void ofApp::keyReleased(int key){
@@ -397,11 +384,7 @@ void ofApp::keyReleased(int key){
             sendChar(1);
             ofLog() << "char sent : ";
             break;
-        case 'a':
-            
-            sendMoveTo(a);
-            ofLog() << "MoveTo sent : "<< a;
-            break;
+
         case 'd':
             debugMode = !debugMode;
             break;
@@ -562,44 +545,6 @@ void ofApp::sendChar(int a){
     arduinoB.writeByte(hi[0]);
     arduinoC.writeByte(hi[0]);
     ofLog() << "send char ";
-    
-}
-
-void ofApp::sendDir(int a){
-    //  vector<uint8_t> hi;
-    
-    //     hi.push_back(a);
-    //     hi.push_back('\n');
-    
-    
-    //   std::string text = ofToString(a);
-    //  ofx::IO::ByteBuffer textBuffer(text);
-    
-    // ofx::IO::ByteBuffer buffer(hi);
-    // deviceMotor.writeByte(hi);
-    
-    
-    //  for(int i=0;i<1000; i++){
-    arduinoA.writeByte(a);
-    arduinoB.writeByte(a);
-    //  }
-    
-    /*for(int i=0;i<1000; i++){
-     deviceDiscMotor.writeByte(a);
-     //      deviceMotor.writeByte('\n');
-     }*/
-}
-
-
-void ofApp::sendMoveTo(int b){
-    /* vector<uint8_t> hi;
-     hi.push_back(b);
-     ofx::IO::ByteBuffer buffer(hi);
-     deviceAccel.writeByte(hi[0]);*/
-    
-    arduinoA.writeByte(b);
-    arduinoB.writeByte(b);
-    arduinoC.writeByte(b);
     
 }
 
