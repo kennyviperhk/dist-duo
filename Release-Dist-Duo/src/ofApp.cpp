@@ -243,9 +243,9 @@ void ofApp::videoMixing(){
         }
         float modX;
         if(isLeftEye){
-            modX = ofMap(currAngle,-topAngle,topAngle,100,1400);
+            modX = ofMap(currAngle,-topAngle,topAngle,1500, 500);
         }else{
-            modX = ofMap(currAngle,-topAngle,topAngle,-100,-1400);
+            modX = ofMap(currAngle,-topAngle,topAngle,-1500,-500);
 
         }
         //

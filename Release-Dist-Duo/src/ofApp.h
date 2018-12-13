@@ -2,7 +2,7 @@
 
 #include "ofMain.h"
 #include "ofxSerial.h"
-//#define USE_PI
+#define USE_PI
 
 
 
