@@ -49,7 +49,8 @@ unsigned long previousMillis = 0;        // will store last time LED was updated
 
 // constants won't change :
 const long interval = 900000;
-
+//const long sendInterval = 33;
+const long sendInterval = 16.67;
 //const long interval = 9000;
 
 
@@ -341,16 +342,26 @@ void loop() {
 #endif
 
 #ifdef OUTPUT_READABLE_YAWPITCHROLL
+
+      unsigned long currentMillis = millis();
+     
+
+  if (currentMillis - previousMillis >= sendInterval) {
     // display Euler angles in degrees
     mpu.dmpGetQuaternion(&q, fifoBuffer);
     mpu.dmpGetGravity(&gravity, &q);
     mpu.dmpGetYawPitchRoll(ypr, &q, &gravity);
     Serial.print("ypr\t");
-    Serial.print(ypr[0] * 180 / M_PI);
-    Serial.print("\t");
-    Serial.print(ypr[1] * 180 / M_PI);
-    Serial.print("\t");
+   // Serial.print(ypr[0] * 180 / M_PI);
+    //Serial.print("\t");
+   // Serial.print(ypr[1] * 180 / M_PI);
+   // Serial.print("\t");
     Serial.println(ypr[2] * 180 / M_PI);
+
+
+    previousMillis = currentMillis;
+
+  }
 #endif
 
 #ifdef OUTPUT_READABLE_REALACCEL
