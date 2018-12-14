@@ -2,7 +2,7 @@
 
 #include "ofMain.h"
 #include "ofxSerial.h"
-//#define USE_PI
+#define USE_PI
 
 
 
@@ -16,7 +16,7 @@
 #define FRAMERATE 40
 #define VIDEO_DISPLAY_SCALE 0.2
 
-#define AUTO_RESTART 0
+#define AUTO_RESTART 1
 
 
 class SerialMessage
