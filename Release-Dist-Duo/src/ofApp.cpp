@@ -2,7 +2,7 @@
 
 //--------------------------------------------------------------
 void ofApp::setup(){
-    isLeftEye = false;
+    isLeftEye = true;
     debugMode = false;
     
     ofSetFrameRate(FRAMERATE);
