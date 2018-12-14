@@ -2,7 +2,7 @@
 
 //--------------------------------------------------------------
 void ofApp::setup(){
-    isLeftEye = true;
+    isLeftEye = false;
     debugMode = false;
     
     ofSetFrameRate(FRAMERATE);
@@ -108,7 +108,7 @@ void ofApp::update(){
                 }
             }
             else{
-                int maxPower = 75;
+                int maxPower = 70;
                 speedToChange = ofMap(abs(angleChangeSpeed),0,10,maxPower,40);
                 if(speedToChange >= maxPower){
                     speedToChange = maxPower;
