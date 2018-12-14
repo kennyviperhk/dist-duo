@@ -108,9 +108,10 @@ void ofApp::update(){
                 }
             }
             else{
-                speedToChange = ofMap(abs(angleChangeSpeed),0,10,80,40);
-                if(speedToChange >= 80){
-                    speedToChange = 80;
+                int maxPower = 75;
+                speedToChange = ofMap(abs(angleChangeSpeed),0,10,maxPower,40);
+                if(speedToChange >= maxPower){
+                    speedToChange = maxPower;
                 }
             }
             changeSpeed(speedToChange);
@@ -184,9 +185,13 @@ void ofApp::update(){
             ofLog()<< "Too Slow, restart!";
             std::exit(1);
         }
+        if(ofGetFrameNum() > 400 && (isDiscArduino == -1 || isScreenArduino == -1)){
+            ofLog()<< "Too Slow, restart!";
+            std::exit(1);
+        }
         ofLog()<< "prevAngle" <<prevAngle;
         ofLog()<< "currAngle" <<currAngle;
-        if(receivedVal[1]==0 || angleChangeSpeed == 0){
+        if(receivedVal[1]==0 || angleChangeSpeed == 0 ){
             
             serialFailCheck++;
             
