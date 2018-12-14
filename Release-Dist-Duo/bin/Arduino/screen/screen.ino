@@ -25,8 +25,8 @@ void setup() {
   pinMode(enPin, OUTPUT);
   digitalWrite(enPin, LOW);
 
-  stepper.setMaxSpeed(700);
-  stepper.setAcceleration(700);
+  stepper.setMaxSpeed(3000);
+  stepper.setAcceleration(3000);
   Serial.begin(115200);
 
   Serial.println("Calibration...");

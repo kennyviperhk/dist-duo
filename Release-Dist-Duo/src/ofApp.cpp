@@ -2,7 +2,7 @@
 
 //--------------------------------------------------------------
 void ofApp::setup(){
-    isLeftEye = true;
+    isLeftEye = false;
     debugMode = false;
     
     ofSetFrameRate(FRAMERATE);
@@ -12,7 +12,7 @@ void ofApp::setup(){
     videoPlayerSetup();
     
     //=====DEBUG =====
-    serialFailCheck =0;
+    serialFailCheck = 0;
 }
 
 void ofApp::initReset(){
@@ -58,12 +58,18 @@ void ofApp::update(){
     }
     
     if(currAngle > topAngle && nextScreenTrigger){
-            sendCommand(isScreenArduino, "r");
+        if(isLeftEye){
+                        sendCommand(isScreenArduino, "r");
+        }
+
             screenIsOnRight = true;
             nextScreenTrigger = false;
     
     }else if(currAngle< -topAngle && nextScreenTrigger){
+        if(!isLeftEye){
         sendCommand(isScreenArduino, "l");
+        }
+
         screenIsOnLeft = true;
         nextScreenTrigger = false;
     }
@@ -123,7 +129,14 @@ void ofApp::update(){
     if(receivedVal[0] == 0){
         accelVal = receivedVal;
         //  currAngle = accelVal[1];
-        currAngle = accelVal[1];
+                int offset = 0;
+        if(isLeftEye){
+            
+        }else{
+            offset = -11;
+        }
+
+        currAngle = accelVal[1] + offset;
     }else if(receivedVal[0] == 1){
         discVal = receivedVal;
     }else{
@@ -228,7 +241,12 @@ void ofApp::videoMixing(){
         ofPushMatrix();
         
         ofTranslate(finalVid.getWidth()/2, finalVid.getHeight()/2);
-        ofRotateZDeg(currAngle);
+        if(isLeftEye){
+                    ofRotateZDeg(currAngle);
+        }
+        else{
+                    ofRotateZDeg(-currAngle);
+        }
         int valToOffset =0;
         //  valToOffset =  ofMap(mouseX, 0, ofGetWidth(), -finalVid.getWidth()*2, finalVid.getWidth()*2);
         ofTranslate(-finalVid.getWidth()/2 + valToOffset, -finalVid.getHeight()/2);
@@ -253,13 +271,26 @@ void ofApp::videoMixing(){
         // float modY = ofMap(mouseX, 0,ofGetWidth(), -800, 800);
         // ofLog()<< " modY " << modY;
         if(isEye){
-            vid1YPos = 1200 - 302;
-            vid2YPos = 1200 - 360;
-          //    ofLog()<< "A" << vidChannel;
+            if(isLeftEye){
+                
+                vid1YPos = 1200 - 302;
+                vid2YPos = 1200 - 360;
+            }else{
+                vid1YPos = 1200 - 302 + 129;
+                vid2YPos = 1200 - 360 + 1.5;
+            }
+
+              ofLog()<< "A" << vidChannel;
         }else{ //turn
-            vid1YPos = 1200 - 302;
-            vid2YPos = 1200 - 360;
-           //   ofLog()<< "B" << vidChannel;
+            if(isLeftEye){
+                
+                vid1YPos = 1200 - 302;
+                vid2YPos = 1200 - 360;
+            }else{
+                vid1YPos = 1200 - 302 + 129;
+                vid2YPos = 1200 - 360 + 1.5;
+            }
+             ofLog()<< "B" << vidChannel;
         }
         if(vidChannel == 1){
             ofTranslate(modX, vid1YPos);
