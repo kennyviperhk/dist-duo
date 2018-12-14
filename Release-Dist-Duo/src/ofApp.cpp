@@ -59,7 +59,7 @@ void ofApp::update(){
     
     if(currAngle > topAngle && nextScreenTrigger){
         if(isLeftEye){
-                        sendCommand(isScreenArduino, "r");
+        sendCommand(isScreenArduino, "l");
         }
 
             screenIsOnRight = true;
@@ -245,7 +245,7 @@ void ofApp::videoMixing(){
                     ofRotateZDeg(currAngle);
         }
         else{
-                    ofRotateZDeg(-currAngle);
+                    ofRotateZDeg(currAngle);
         }
         int valToOffset =0;
         //  valToOffset =  ofMap(mouseX, 0, ofGetWidth(), -finalVid.getWidth()*2, finalVid.getWidth()*2);
@@ -263,7 +263,7 @@ void ofApp::videoMixing(){
         if(isLeftEye){
             modX = ofMap(currAngle,-topAngle,topAngle,1500, 500);
         }else{
-            modX = ofMap(currAngle,-topAngle,topAngle,-1500,-500);
+            modX = ofMap(currAngle,-topAngle,topAngle,-500,-1500);
 
         }
         //
