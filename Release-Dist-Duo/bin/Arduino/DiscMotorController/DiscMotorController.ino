@@ -48,9 +48,7 @@ void setup() {
  // delay(1000);
   analogWrite(motorPWMPin, 40);
   delay(1000);
-  analogWrite(motorPWMPin, 0);
- // delay(1000);
-
+  power = 0;
 
   //
   pinMode (motorHzPin, INPUT_PULLUP) ; // just in case its open-collector
