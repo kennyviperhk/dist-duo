@@ -1,0 +1,3 @@
+sudo nano /etc/xdg/lxsession/LXDE-pi/autosart
+
+@/bin/bash /home/pi/runApp.sh
