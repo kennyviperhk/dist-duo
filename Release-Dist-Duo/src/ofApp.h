@@ -26,6 +26,12 @@
 /*
  1. isLeftEye = true for left device, false for right device
  2. wifi settings in /etc/network/wpa_supplicant.conf
+ 
+ 
+ On device ignore local change and pull:
+ 
+ git reset --hard
+ git pull
  */
 class SerialMessage
 {
