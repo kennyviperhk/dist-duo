@@ -23,7 +23,10 @@
 
 #define AUTO_RESTART 1
 
-
+/*
+ 1. isLeftEye = true for left device, false for right device
+ 2. wifi settings in /etc/network/wpa_supplicant.conf
+ */
 class SerialMessage
 {
 public:
