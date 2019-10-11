@@ -113,7 +113,7 @@ void ofApp::update(){
                 }
             }
             else{
-                int maxPower = 75;
+                int maxPower = 60;
                 speedToChange = ofMap(abs(angleChangeSpeed),0,10,maxPower,40);
                 if(speedToChange >= maxPower){
                     speedToChange = maxPower;
