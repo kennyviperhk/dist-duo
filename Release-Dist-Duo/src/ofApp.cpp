@@ -91,7 +91,12 @@ void ofApp::update(){
         screenIsOnLeft = false;
         nextScreenTrigger = true;
     }
-    swingInterval = ofRandom(2500,3500);
+    if(isHumanPresent){
+            swingInterval = ofRandom(2500,3500);
+    }else{
+            swingInterval = ofRandom(100,150);
+    }
+
     if(currTime - swingMillis > swingInterval && abs(angleChangeSpeed) < 2 && abs(currAngle) < topAngle && isHumanPresent){
         swingMillis = currTime;
         if(angleChangeSpeed > 8 || abs(currAngle) > topAngle){
@@ -123,7 +128,11 @@ void ofApp::update(){
             ofLog() << "speedToChange : " << speedToChange;
         }
     }else{
-        changeSpeed(0);
+        if(currTime - swingMillis > swingInterval){
+            swingMillis = currTime;
+            changeSpeed(0);
+            ofLog() << "speedToChange (off): ";
+        }
     }
 
     if(debugMode){

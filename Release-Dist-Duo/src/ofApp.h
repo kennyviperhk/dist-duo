@@ -25,7 +25,7 @@
 
 /*
  1. isLeftEye = true for left device, false for right device
- 2. wifi settings in /etc/network/wpa_supplicant.conf
+ 2. wifi settings in sudo nano /etc/wpa_supplicant/wpa_supplicant.conf
  
  
  On device ignore local change and pull:

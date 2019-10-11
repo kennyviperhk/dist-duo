@@ -57,8 +57,8 @@ int relayPin = 11;
 int relayPin2 = 12;
 int relayState = LOW;             // ledState used to set the LED
 #include <Metro.h> // Include Metro library
-//long intervalTime = 900000; // 20 min
-long intervalTime = 5000;
+long intervalTime = 900000; // 20 min
+//long intervalTime = 5000;
 Metro metroRelay = Metro(intervalTime);
 
 
