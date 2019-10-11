@@ -2,7 +2,12 @@
 
 #include "ofMain.h"
 #include "ofxSerial.h"
-#define USE_PI
+#include "ofxOsc.h"
+
+// listening port
+#define PORT 9001
+
+//#define USE_PI
 
 
 
@@ -166,6 +171,14 @@ public:
     int topAngle;
     bool screenIsOnRight;
     bool screenIsOnLeft;
+    
+    
+    
+    /* OSC-PIR*/
+    ofxOscReceiver receiver;
+    string receviedOSCString;
+    string prevReceviedOSCString;
+    bool isHumanPresent;
 };
 
 

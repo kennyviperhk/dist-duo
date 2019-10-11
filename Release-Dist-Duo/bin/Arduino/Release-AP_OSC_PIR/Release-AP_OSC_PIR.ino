@@ -5,8 +5,8 @@
 
 //Config
 #ifndef APSSID
-#define APSSID "ESPap"
-#define APPSK  "thereisnospoon"
+#define APSSID "dist.duo"
+#define APPSK  "helloworld"
 #endif
 const char* host = "192.168.4.255"; //broadcast
 const int recv_port = 8888;

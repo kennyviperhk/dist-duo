@@ -44,6 +44,11 @@ void ofApp::initReset(){
     nextScreenTrigger = true;
     screenIsOnRight = false;
     screenIsOnLeft = false;
+    
+    
+    /*OSC PIR*/
+    receiver.setup(PORT);
+    isHumanPresent = true;
 }
 
 //--------------------------------------------------------------
@@ -87,7 +92,7 @@ void ofApp::update(){
         nextScreenTrigger = true;
     }
     swingInterval = ofRandom(2500,3500);
-    if(currTime - swingMillis > swingInterval && abs(angleChangeSpeed) < 2 && abs(currAngle) < topAngle){
+    if(currTime - swingMillis > swingInterval && abs(angleChangeSpeed) < 2 && abs(currAngle) < topAngle && isHumanPresent){
         swingMillis = currTime;
         if(angleChangeSpeed > 8 || abs(currAngle) > topAngle){
             swingInterval+= 1500;
@@ -108,7 +113,7 @@ void ofApp::update(){
                 }
             }
             else{
-                int maxPower = 70;
+                int maxPower = 75;
                 speedToChange = ofMap(abs(angleChangeSpeed),0,10,maxPower,40);
                 if(speedToChange >= maxPower){
                     speedToChange = maxPower;
@@ -117,6 +122,8 @@ void ofApp::update(){
             changeSpeed(speedToChange);
             ofLog() << "speedToChange : " << speedToChange;
         }
+    }else{
+        changeSpeed(0);
     }
 
     if(debugMode){
@@ -206,8 +213,39 @@ void ofApp::update(){
         
     }
     
+    //================== OSC PIR ==================
+
+    // check for waiting messages
+    while(receiver.hasWaitingMessages()){
+        
+        // get the next message
+        ofxOscMessage m;
+        receiver.getNextMessage(m);
+        
+        // check for mouse moved message
+        if(m.getAddress() == "/pir"){
+            
+            // both the arguments are floats
+            receviedOSCString = m.getArgAsString(0);
+            
+            if(prevReceviedOSCString != receviedOSCString){
+                if(receviedOSCString == "on"){
+                    ofLog() << receviedOSCString << ", OSC is on";
+                    isHumanPresent = true;
+                    
+                }else if(receviedOSCString == "off"){
+                    ofLog() << receviedOSCString << ", OSC is off";
+                    isHumanPresent = false;
+                }
+                prevReceviedOSCString = receviedOSCString;
+            }
+        }else{
+            ofLog() << "other OSC msg";
+        }
+        
+    }
     
-    
+    /*OSC PIR ends*/
     
 }
 
