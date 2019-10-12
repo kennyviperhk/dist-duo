@@ -127,12 +127,10 @@ void ofApp::update(){
             changeSpeed(speedToChange);
             ofLog() << "speedToChange : " << speedToChange;
         }
-    }else{
-        if(currTime - swingMillis > swingInterval){
+    }else if (!isHumanPresent && currTime - swingMillis > swingInterval){
             swingMillis = currTime;
             changeSpeed(0);
             ofLog() << "speedToChange (off): ";
-        }
     }
 
     if(debugMode){
