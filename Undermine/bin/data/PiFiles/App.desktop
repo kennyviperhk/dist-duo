@@ -1,4 +1,0 @@
-[Desktop Entry]
-Name=Undermine
-Exec=sh /home/pi/runApp.sh
-Type=Application

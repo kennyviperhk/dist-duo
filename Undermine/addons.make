@@ -1,4 +1,0 @@
-ofxIO
-ofxPostGlitch
-ofxSerial
-ofxOMXPlayer
